@@ -1,3 +1,34 @@
 body{
     background-image: url("sea-background-image3.jpg");
 }
+
+.game-screen{
+    margin: auto;
+    width: 500px;
+    height: 500px;
+    padding: 20px;
+    background-color: rgba(75, 97, 161, 0.5);
+}
+
+table{
+    border: 3px solid black;
+}
+
+.zone-button{
+    font-size: 50px;
+    border: 1px solid black;
+    width: 95px;
+    height: 95px;
+    background-color: rgb(128,128,128);
+}
+
+.bomb-image{
+    padding-top: 5px;
+}
+
+.no-bomb{
+    border: none;
+    width: 95px;
+    height: 95px;
+    background-color: rgba(75, 97, 161, 0.5);
+}
