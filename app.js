@@ -1,5 +1,5 @@
 //instantiating the variables
-let gameArray, activePlayer, score, bombsSample;
+let gameArray, activePlayer, score, bombsSample, winTheGame;
 
 //init the game
 gameInit();
@@ -289,6 +289,7 @@ function gameInit(){
     activePlayer = 1;
     score = 0;
     bombsSample = 0;
+    winTheGame = 0;
 
     //creating the game array
     gameArray = [[0,0,0,0,0],
@@ -343,6 +344,7 @@ function scoreHandler(lineIndex, columnIndex){
 
     //ending the game
     if(score === 25-bombsSample ){
+        winTheGame = 1;
         activePlayer = 0;
         document.querySelector('.end-message').textContent = "YOU WIN THE GAME!"
     }
@@ -350,13 +352,13 @@ function scoreHandler(lineIndex, columnIndex){
 
 function resetGame(){
     //reseting the game - (1)game over way, (2)during the game way
-    if(!activePlayer){
+    if(!activePlayer && !winTheGame){
         gameInit();
         document.querySelector('.bomb-image').remove();
         buttonsReturn();
         document.querySelector('.game-screen').classList.remove('game-over');
     }
-    else if( activePlayer && score>0){
+    else if( activePlayer && score>0 || !activePlayer && winTheGame){
         gameInit();
         buttonsReturn();
     }
