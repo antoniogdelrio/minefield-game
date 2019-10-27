@@ -1,27 +1,10 @@
 var gameArray, activePlayer, score, bombsSample;
-activePlayer = 1;
-score = 0;
-bombsSample = 0;
-gameArray = [[0,0,0,0,0],
-             [0,0,0,0,0], 
-             [0,0,0,0,0],
-             [0,0,0,0,0],
-             [0,0,0,0,0]]
 
-document.querySelector('.score').textContent = score;
-if(activePlayer){
-    for(var lineIterator=0; lineIterator < gameArray.length ; lineIterator++){
-        for(var arrayIterator = 0; arrayIterator < gameArray[lineIterator].length; arrayIterator++){
-            var randomBomb = Math.floor(Math.random() * 2);
-            gameArray[lineIterator][arrayIterator] = randomBomb;
-            if(randomBomb){
-                bombsSample++;
-            }
-        }
-    } 
-}
-console.log(bombsSample);
-console.log(gameArray);
+gameInit();
+
+document.querySelector('.reset-button').addEventListener('click', function(){
+    resetGame();
+})
 
 document.getElementById('zone-0-0').addEventListener('click', function(){
     if(activePlayer){
@@ -289,14 +272,42 @@ document.getElementById('zone-4-4').addEventListener('click', function(){
     }  
 })
 
+function gameInit(){
+    activePlayer = 1;
+    score = 0;
+    bombsSample = 0;
+    gameArray = [[0,0,0,0,0],
+                [0,0,0,0,0], 
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0]]
+
+    document.querySelector('.panel-score').textContent = 'SCORE: ' + score;
+    document.querySelector('.end-message').textContent = 'GOOD LUCKY!';
+    for(var lineIterator=0; lineIterator < gameArray.length ; lineIterator++){
+        for(var arrayIterator = 0; arrayIterator < gameArray[lineIterator].length; arrayIterator++){
+            var randomBomb = Math.floor(Math.random() * 2);
+            gameArray[lineIterator][arrayIterator] = randomBomb;
+            if(randomBomb){
+                bombsSample++;
+            }
+        }
+    } 
+    console.log(bombsSample);
+    console.log(gameArray);
+}
+
 function bombHandler(lineIndex, columnIndex){
     //replace button <-> bomb image
     var bombImage = document.createElement("img");
     bombImage.classList.add('bomb-image');
     bombImage.src = "bomb.jpg";
     var oldButton = document.querySelector("#zone-button-"+lineIndex+'-'+columnIndex);
-    document.querySelector('#zone-'+lineIndex+'-'+columnIndex).replaceChild(bombImage, oldButton);
+    oldButton.style.display = 'none';
+    document.querySelector('#zone-'+lineIndex+'-'+columnIndex).appendChild(bombImage);
     
+    document.querySelector('.game-screen').classList.toggle('game-over');
+    document.querySelector('.end-message').textContent = "GAME OVER!"
     //ending the game
     activePlayer = 0;
 }
@@ -306,11 +317,35 @@ function scoreHandler(lineIndex, columnIndex){
     button.classList.add('no-bomb');
     button.disabled = 'true';
     score++;
-    document.querySelector('.score').textContent = score;
+    document.querySelector('.panel-score').textContent = 'SCORE: ' + score;
 
     if(score === 25-bombsSample ){
         activePlayer = 0;
-        document.querySelector('.score').innerHTML = "<h1>WIN THE GAME!</h1>"
+        document.querySelector('.end-message').textContent = "YOU WIN THE GAME!"
     }
-    
+}
+
+function resetGame(){
+    if(!activePlayer){
+        gameInit();
+        allButtons = document.querySelectorAll('.zone-button');
+        document.querySelector('.bomb-image').remove();
+
+        for(var buttonsIterator = 0; buttonsIterator<allButtons.length; buttonsIterator++){
+            allButtons[buttonsIterator].classList.remove('no-bomb');
+            allButtons[buttonsIterator].style.display = '';
+            allButtons[buttonsIterator].removeAttribute('disabled');
+        }
+        
+        document.querySelector('.game-screen').classList.remove('game-over');
+    }
+    else if( activePlayer && score>0){
+        gameInit();
+        allButtons = document.querySelectorAll('.zone-button');
+        for(var buttonsIterator = 0; buttonsIterator<allButtons.length; buttonsIterator++){
+            allButtons[buttonsIterator].classList.remove('no-bomb');
+            allButtons[buttonsIterator].style.display = '';
+            allButtons[buttonsIterator].removeAttribute('disabled');
+        }
+    }
 }
