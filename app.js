@@ -319,7 +319,7 @@ function bombHandler(lineIndex, columnIndex){
     //replacing button <-> bomb image
     let bombImage = document.createElement("img");
     bombImage.classList.add('bomb-image');
-    bombImage.src = "bomb.jpg";
+    bombImage.src = "img/bomb.jpg";
     let oldButton = document.querySelector("#zone-button-"+lineIndex+'-'+columnIndex);
     oldButton.style.display = 'none';
     document.querySelector('#zone-'+lineIndex+'-'+columnIndex).appendChild(bombImage);
